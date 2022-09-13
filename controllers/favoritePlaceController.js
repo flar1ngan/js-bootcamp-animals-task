@@ -6,14 +6,10 @@ import favoritePlaceModel from "../models/favoritePlaceModel.js";
 export const createPlace = async(req,res) => {
     try {
         const newPlace = new favoritePlaceModel({ ...req.body });
-        const birds = await birdModel.find({});
-        const cats = await catModel.find({});
-        const dogs = await dogModel.find({});
-        const filteredBirds = birds.filter(bird => bird.favoritePlace == newPlace.place);
-        const filteredCats = cats.filter(cat => cat.favoritePlace == newPlace.place);
-        const filteredDogs = dogs.filter(dog => dog.favoritePlace == newPlace.place);
-        newPlace.animal = [filteredBirds, filteredCats, filteredDogs];
-        console.log(newPlace);
+        const birds = await birdModel.find({favoritePlace: newPlace.place});
+        const cats = await catModel.find({favoritePlace: newPlace.place});
+        const dogs = await dogModel.find({favoritePlace: newPlace.place});
+        newPlace.animal = [birds, cats, dogs];
         await newPlace.save();
         res.status(201).send("new place created");
     } catch (error) {
